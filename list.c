@@ -1,7 +1,7 @@
 // list.c
-// written by Edward 'Cole' Skoviak (ecskoviak@crimson.ua.edu)
+// written by Edward 'Cole' Skoviak
 //
-//
+// List data structure
 
 #include <stdlib.h>
 #include "lexeme.h"

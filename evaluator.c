@@ -1,5 +1,5 @@
 // evaluator.c
-// written by Edward 'Cole' Skoviak (ecskoviak@crimson.ua.edu)
+// written by Edward 'Cole' Skoviak
 //
 // Evaluator
 

@@ -1,5 +1,5 @@
 // lexer.c
-// written by Edward 'Cole' Skoviak (ecskoviak@crimson.ua.edu)
+// written by Edward 'Cole' Skoviak
 //
 // Lexical Analyzer for reading and tokenizing input
 

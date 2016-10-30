@@ -1,7 +1,7 @@
 // list.h
-// written by Edward 'Cole' Skoviak (ecskoviak@crimson.ua.edu)
+// written by Edward 'Cole' Skoviak
 //
-// 
+// List data structure
 
 extern lexeme* cons(char*,lexeme*,lexeme*);
 extern lexeme* car(lexeme*);
