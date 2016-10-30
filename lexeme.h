@@ -3,8 +3,7 @@
 //
 // Lexemes to hold token information
 
-typedef struct lexemeStruct
-    {
+typedef struct lexemeStruct {
     char *type;
 
     // Value Part
@@ -14,7 +13,7 @@ typedef struct lexemeStruct
     struct lexemeStruct **aval;
     struct lexemeStruct *left;
     struct lexemeStruct *right;
-    } lexeme;
+} lexeme;
 
 extern lexeme* newIntegerLexeme(int value);
 extern lexeme* newStringLexeme(char* value);
@@ -22,4 +21,3 @@ extern lexeme* newKeywordLexeme(char* type);
 extern lexeme* newIdentifierLexeme(char* type);
 extern lexeme* newArrayLexeme(int size);
 extern lexeme* newEmptyLexeme();
-
