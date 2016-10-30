@@ -1,0 +1,22 @@
+
+/*   this program
+     illustrates evaluation of 
+     arithmetic and boolean
+     expressions
+*/
+function main( ) {
+	var m,n,p;
+	var a,b,c;
+	m = 2;
+	print(m);
+	n = 3;
+	print(n);
+	p=-m-3+n/2*(-5+m*n%4);
+	print(p);
+	a=m>n || n>=p;
+	if (a) print(1); else print(0);
+	b=m<n && n<=p;
+	if (b==true) print(1); else print(0);
+	c=a && !b || !a && b;
+	if (c!=false) print(1); else print(0);	
+}

@@ -1,0 +1,21 @@
+var a;
+
+/* comment here
+
+newlines in comments still increment line count
+
+*/
+
+function tester(ean)
+    {
+    var a,b;
+    function testee(eger)
+        {
+        var x;
+        }
+    a = 3;
+    testee(a);
+    b = a + 6;
+    }
+
+"lineNum21
