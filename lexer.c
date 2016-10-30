@@ -27,28 +27,24 @@ static lexeme* getString();
 static lexeme* checkKeyword(char []);
 
 // Set source file
-void lexInit(char *f)
-	{
+void lexInit(char *f) {
     file = fopen(f, "r" );
 
-	// If 0 returns, file does not exist
-    if (file == 0)
-        {
-	    printf( "Could not open file \"%s\".\n", f);
+    // If 0 returns, file does not exist
+    if (file == 0) {
+        printf( "Could not open file \"%s\".\n", f);
         exit(EXIT_FAILURE);
-	    }
     }
+}
 
 // Lexical Analyzer
-lexeme* lex()
-    {
+lexeme* lex() {
     int c;
     skipWhiteSpace();
     c = getc(file);
-    
+
     // Switch for processing token
-    switch (c)
-        {
+    switch (c) {
         case EOF:
             return newKeywordLexeme(ENDFILE);
         case '(':
@@ -81,95 +77,82 @@ lexeme* lex()
             c = getc(file);
             if (c == '&')
                 return newKeywordLexeme(AND);
-            else
-                {
+            else {
                 ungetc(c,file);
                 return newKeywordLexeme(ADDR);
-                }
+            }
         case '|':
             c = getc(file);
             if (c == '|')
                 return newKeywordLexeme(OR);
-            else
-                {
+            else {
                 printf("| on line %d is an invalid token.\n",line);
                 exit(EXIT_FAILURE);
-                }
+            }
         case '!':
             c = getc(file);
-            if (c == '=') 
+            if (c == '=')
                 return newKeywordLexeme(NE);
-            else
-                {
+            else {
                 ungetc(c,file);
                 return newKeywordLexeme(NOT);
-                }
+            }
         case '=':
             c = getc(file);
             if (c == '=')
                 return newKeywordLexeme(EQ);
-            else
-                {
+            else {
                 ungetc(c,file);
                 return newKeywordLexeme(IS);
-                }
+            }
         case '<':
             c = getc(file);
             if (c == '=')
                 return newKeywordLexeme(LE);
-            else
-                {
+            else {
                 ungetc(c,file);
                 return newKeywordLexeme(LT);
-                }
+            }
         case '>':
             c = getc(file);
             if (c == '=')
                 return newKeywordLexeme(GE);
-            else
-                {
+            else {
                 ungetc(c,file);
                 return newKeywordLexeme(GT);
-                }
+            }
         default:
             // Integer token
-            if (isdigit(c))
-                {
+            if (isdigit(c)) {
                 ungetc(c,file);
                 return getInteger();
-                }
+            }
             // Identifier or keyword token
-            else if (isalpha(c))
-                {
+            else if (isalpha(c)) {
                 ungetc(c,file);
                 return getIdentifier();
-                }
+            }
             // String token
-            else if (c == '"')
-                {
+            else if (c == '"') {
                 return getString();
-                }
+            }
             // Character does not exist in language
-            else 
-                {
+            else {
                 printf("%c on line %d is an invalid token.\n", c,line);
                 exit(EXIT_FAILURE);
-                }
-        }
+            }
     }
-    
-static void skipWhiteSpace()
-    {
+}
+
+static void skipWhiteSpace() {
     int c;
-    
+
     // Loop continuously until next token begins
-    while (true)
-        {
+    while (true) {
         c = getc(file);
-        
+
         // Switch for processing white space
-        switch (c)
-            {
+        switch (c) {
             case ' ':
                 break;
             case '\t':
@@ -181,135 +164,120 @@ static void skipWhiteSpace()
                 break;
             case '/':
                 c = getc(file);
-                
+
                 // Comment found
-                if (c == '*')
-                    {
+                if (c == '*') {
                     skipComment();
 
                     // Skip any white space after comment
                     return skipWhiteSpace();
-                    }
-                    
+                }
+
                 // Comment not found, put characters back in stream and return
-                else
-                    {
+                else {
                     ungetc(c,file);
                     ungetc('/',file);
                     return;
-                    }
-                    
+                }
+
             // No white space left, return to lex
             default:
                 ungetc(c,file);
                 return;
-            }
         }
     }
-    
-static void skipComment()
-    {
+}
+
+static void skipComment() {
     int c = getc(file);
-    
+
     // Wait until * is found to signal potential end of comment
-    while (c != '*')
-        {
+    while (c != '*') {
         if (c == '\n')
             line++;
-        else if (c == EOF)
-            {
+        else if (c == EOF) {
             ungetc(c,file);
             return;
-            }
-        c = getc(file);
         }
+        c = getc(file);
+    }
 
     c = getc(file);
-    
+
     // If next character is '/', comment is completed
     if (c == '/')
         return;
-        
+
     // Comment is not completed, continue searching for end
-    else
-        {
+    else {
         ungetc(c,file);
         skipComment();
-        }
     }
+}
 
-static lexeme* getInteger()
-    {
+static lexeme* getInteger() {
     int c = getc(file);
     int iValue = 0;
-    
+
     // Retrieve rest of token
-    while (isdigit(c))
-        {
+    while (isdigit(c)) {
         // Subtract '0' to convert to integer
         iValue = iValue*10+c-'0';
         c = getc(file);
-        }
+    }
     ungetc(c,file);
     return newIntegerLexeme(iValue);
-    }
+}
 
-static lexeme* getIdentifier()
-    {
+static lexeme* getIdentifier() {
     int c = getc(file);
     char tempIdArray[55];
     int idSize = 0;
-    
+
     // Retrieve rest of token
-    while (isalpha(c) || isdigit(c) || c == '_')
-        {
+    while (isalpha(c) || isdigit(c) || c == '_') {
         tempIdArray[idSize] = c;
         idSize++;
-        if (idSize >= 55)
-            {
-            printf("Identifier on line %d is an invalid length, it ", line); 
+        if (idSize >= 55) {
+            printf("Identifier on line %d is an invalid length, it ", line);
             printf("must not exceed 55 characters.\n");
             exit(EXIT_FAILURE);
-            }
-        c = getc(file);
         }
+        c = getc(file);
+    }
     ungetc(c,file);
-    
+
     // Add null character
     tempIdArray[idSize] = '\0';
-    
+
     // Allocate memory for character array, copy idValue to new array
     char *idValue = (char *) malloc(sizeof(char) * (idSize + 1));
     if (idValue == 0) fprintf(stderr,"Out of memory");
     strcpy(idValue, tempIdArray);
     return checkKeyword(idValue);
-    }
-    
-static lexeme* getString()
-    {
+}
+
+static lexeme* getString() {
     int c = getc(file);
     char tempStrArray[1000];
     int strSize = 0;
-    
+
     // Retrieve rest of token
-    while (c != '"')
-        {
-        if (c == EOF)
-            {
+    while (c != '"') {
+        if (c == EOF) {
             printf("String ending on line %d doesn't have closing \".\n", line);
             exit(EXIT_FAILURE);
-            }
+        }
         tempStrArray[strSize] = c;
         strSize++;
-        if (strSize >= 1000)
-            {
-            printf("String on line %d is an invalid length, it ", line); 
+        if (strSize >= 1000) {
+            printf("String on line %d is an invalid length, it ", line);
             printf("must not exceed 1000 characters.\n");
             exit(EXIT_FAILURE);
-            }
-        c = getc(file);
         }
-    
+        c = getc(file);
+    }
+
     // Add null character
     tempStrArray[strSize] = '\0';
 
@@ -318,63 +286,52 @@ static lexeme* getString()
     if (sValue == 0) fprintf(stderr,"Out of memory");
     strcpy(sValue, tempStrArray);
     return newStringLexeme(sValue);
-    }
-    
-static lexeme* checkKeyword(char idValue[])
-    {
+}
+
+static lexeme* checkKeyword(char idValue[]) {
     // Use string compare to check token against keywords
-    if (strcmp(idValue,IF) == 0)
-        {
+    if (strcmp(idValue,IF) == 0) {
 	free(idValue);
         return newKeywordLexeme(IF);
-	}
-    else if (strcmp(idValue,ELSE) == 0)
-        {
+    }
+    else if (strcmp(idValue,ELSE) == 0) {
         free(idValue);
         return newKeywordLexeme(ELSE);
-	}
-    else if (strcmp(idValue,TRUE) == 0)
-        {
+    }
+    else if (strcmp(idValue,TRUE) == 0) {
         free(idValue);
         return newKeywordLexeme(TRUE);
-	}
-    else if (strcmp(idValue,FALSE) == 0)
-        {
+    }
+    else if (strcmp(idValue,FALSE) == 0) {
         free(idValue);
         return newKeywordLexeme(FALSE);
-	}
-    else if (strcmp(idValue,WHILE) == 0)
-        {
+    }
+    else if (strcmp(idValue,WHILE) == 0) {
         free(idValue);
         return newKeywordLexeme(WHILE);
-	}
-    else if (strcmp(idValue,DO) == 0)
-        {
+    }
+    else if (strcmp(idValue,DO) == 0) {
         free(idValue);
         return newKeywordLexeme(DO);
-	}
-    else if (strcmp(idValue,PRINT) == 0)
-        {
+    }
+    else if (strcmp(idValue,PRINT) == 0) {
         free(idValue);
         return newKeywordLexeme(PRINT);
-	}
-    else if (strcmp(idValue,VAR) == 0)
-        {
+    }
+    else if (strcmp(idValue,VAR) == 0) {
         free(idValue);
         return newKeywordLexeme(VAR);
-	}
-    else if (strcmp(idValue,FUNCTION) == 0)
-        {
+    }
+    else if (strcmp(idValue,FUNCTION) == 0) {
         free(idValue);
         return newKeywordLexeme(FUNCTION);
-	}
-    else if (strcmp(idValue,ARRAY) == 0)
-        {
+    }
+    else if (strcmp(idValue,ARRAY) == 0) {
         free(idValue);
         return newKeywordLexeme(ARRAY);
-	}
-        
+    }
+
     // Keyword not matched
     else
         return newIdentifierLexeme(idValue);
-    }
+}

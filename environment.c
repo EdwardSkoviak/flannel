@@ -1,5 +1,5 @@
 // environment.c
-// written by Edward 'Cole' Skoviak (ecskoviak@crimson.ua.edu)
+// written by Edward 'Cole' Skoviak
 //
 // Environment functions
 
@@ -12,18 +12,15 @@
 
 #define null ((void *) 0)
 
-lexeme* createEnv()
-    {
+lexeme* createEnv() {
     return cons(ENVIRONMENT,cons(FRAME,null,null),null);
-    }
+}
 
-lexeme * extendEnv(lexeme *env, lexeme *vars, lexeme *vals)
-    {
+lexeme * extendEnv(lexeme *env, lexeme *vars, lexeme *vals) {
     return cons(ENVIRONMENT,cons(FRAME,vars,vals),env);
-    }
+}
 
-lexeme * defineVariable(lexeme* variable, lexeme* value, lexeme* env)
-    {
+lexeme * defineVariable(lexeme* variable, lexeme* value, lexeme* env) {
     lexeme* frame;
     lexeme* vars = car(car(env));
     lexeme* vals = cdr(car(env));
@@ -32,52 +29,44 @@ lexeme * defineVariable(lexeme* variable, lexeme* value, lexeme* env)
     frame = cons(FRAME,vars,vals);
     env->left = frame;
     return variable;
-    }
+}
 
-lexeme* findVariable(lexeme* var, lexeme* env)
-    {
-    while (env != null)
-        {
+lexeme* findVariable(lexeme* var, lexeme* env) {
+    while (env != null) {
         lexeme* table = car(env);
         lexeme* vars = car(table);
         lexeme* vals = cdr(table);
-        while (vars != null)
-            {
+        while (vars != null) {
             if (strcmp(var->sval,car(vars)->sval) == 0)
                 return car(vals);
             vars = cdr(vars);
             vals = cdr(vals);
-            }
-        env = cdr(env);
         }
+        env = cdr(env);
+    }
     printf("%s is not defined.\n", var->sval);
     exit(EXIT_FAILURE);
 
     return null;
-    }
+}
 
-lexeme* updateVariable(lexeme* var, lexeme* val, lexeme* env)
-    {
-    while (env != null)
-        {
+lexeme* updateVariable(lexeme* var, lexeme* val, lexeme* env) {
+    while (env != null) {
         lexeme* table = car(env);
         lexeme* vars = car(table);
         lexeme* vals = cdr(table);
-        while (vars != null)
-            {
-            if (strcmp(var->sval,car(vars)->sval) == 0)
-                {
+        while (vars != null) {
+            if (strcmp(var->sval,car(vars)->sval) == 0) {
                 setCar(vals,val);
                 return val;
-                }
+            }
             vars = cdr(vars);
             vals = cdr(vals);
-            }
-        env = cdr(env);
         }
+        env = cdr(env);
+    }
     printf("%s is not defined.\n", var->sval);
     exit(EXIT_FAILURE);
 
     return null;
-    }
-
+}

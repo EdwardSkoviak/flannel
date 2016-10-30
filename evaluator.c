@@ -39,8 +39,7 @@ static lexeme * evalBlock(lexeme *, lexeme *);
 static lexeme * evalVarDef(lexeme *, lexeme *);
 static lexeme * evalIs(lexeme *, lexeme *);
 
-lexeme* eval(lexeme *tree, lexeme *env)
-    {
+lexeme* eval(lexeme *tree, lexeme *env) {
     if(tree == null)
         return null;
     else if(tree->type == INTEGER)
@@ -104,167 +103,144 @@ lexeme* eval(lexeme *tree, lexeme *env)
     else if(tree->type == BLOCK)
         return evalBlock(tree,extendEnv(env,null,null));
     return null;
-    }
+}
 
 // Lookup and return variable
 
-static lexeme * lookup(lexeme *ident, lexeme *index, lexeme *env)
-    {
+static lexeme * lookup(lexeme *ident, lexeme *index, lexeme *env) {
     lexeme *variable;
     variable = findVariable(ident,env);
     if(index != null)
         return variable->aval[index->ival];
     return variable;
-    }
+}
 
 // Unary minus
 
-static lexeme * uminus(lexeme *subtrahend)
-    {
+static lexeme * uminus(lexeme *subtrahend) {
     return newIntegerLexeme(-subtrahend->ival);
-    }
+}
 
-static lexeme *not(lexeme *condition)
-    {
+static lexeme *not(lexeme *condition) {
     if(condition->type == FALSE)
         return newKeywordLexeme(TRUE);
     else
         return newKeywordLexeme(FALSE);
-    }
+}
 
-static lexeme * multiply(lexeme *leftFactor, lexeme *rightFactor)
-    {
+static lexeme * multiply(lexeme *leftFactor, lexeme *rightFactor) {
     return newIntegerLexeme(leftFactor->ival * rightFactor->ival);
-    }
+}
 
-static lexeme * divide(lexeme *leftTerm, lexeme *rightTerm)
-    {
+static lexeme * divide(lexeme *leftTerm, lexeme *rightTerm) {
     return newIntegerLexeme(leftTerm->ival / rightTerm->ival);
-    }
+}
 
-static lexeme * mod(lexeme *leftTerm, lexeme *rightTerm)
-    {
+static lexeme * mod(lexeme *leftTerm, lexeme *rightTerm) {
     return newIntegerLexeme(leftTerm->ival % rightTerm->ival);
-    }
+}
 
-static lexeme * add(lexeme *augend, lexeme *addend)
-    {
+static lexeme * add(lexeme *augend, lexeme *addend) {
     return newIntegerLexeme(augend->ival + addend->ival);
-    }
+}
 
-static lexeme * subtract(lexeme *minuend, lexeme *subtrahend)
-    {
+static lexeme * subtract(lexeme *minuend, lexeme *subtrahend) {
     return newIntegerLexeme(minuend->ival - subtrahend->ival);
-    }
+}
 
-static lexeme * lessThan(lexeme *leftTerm, lexeme *rightTerm)
-    {
+static lexeme * lessThan(lexeme *leftTerm, lexeme *rightTerm) {
     if(leftTerm->ival < rightTerm->ival)
         return newKeywordLexeme(TRUE);
     else
         return newKeywordLexeme(FALSE);
-    }
-    
-static lexeme * greaterThan(lexeme *leftTerm, lexeme *rightTerm)
-    {
+}
+
+static lexeme * greaterThan(lexeme *leftTerm, lexeme *rightTerm) {
     if(leftTerm->ival > rightTerm->ival)
         return newKeywordLexeme(TRUE);
     else
         return newKeywordLexeme(FALSE);
-    }
+}
 
-static lexeme * lessEqual(lexeme *leftTerm, lexeme *rightTerm)
-    {
+static lexeme * lessEqual(lexeme *leftTerm, lexeme *rightTerm) {
     if(leftTerm->ival <= rightTerm->ival)
         return newKeywordLexeme(TRUE);
     else
         return newKeywordLexeme(FALSE);
-    }
+}
 
-static lexeme * greaterEqual(lexeme *leftTerm, lexeme *rightTerm)
-    {
+static lexeme * greaterEqual(lexeme *leftTerm, lexeme *rightTerm) {
     if(leftTerm->ival >= rightTerm->ival)
         return newKeywordLexeme(TRUE);
     else
         return newKeywordLexeme(FALSE);
-    }
+}
 
-static lexeme * equal(lexeme *leftTerm, lexeme *rightTerm)
-    {
-    if(leftTerm->type == INTEGER)
-        {
+static lexeme * equal(lexeme *leftTerm, lexeme *rightTerm) {
+    if(leftTerm->type == INTEGER) {
         if(leftTerm->ival == rightTerm->ival)
             return newKeywordLexeme(TRUE);
         else
             return newKeywordLexeme(FALSE);
-        }
-    else if(leftTerm->type == STRING)
-        {
+    }
+    else if(leftTerm->type == STRING) {
         if(strcmp(leftTerm->sval,rightTerm->sval) == 0)
             return newKeywordLexeme(TRUE);
         else
             return newKeywordLexeme(FALSE);
-        }
+    }
     else if(leftTerm->type == TRUE && rightTerm->type == TRUE)
         return newKeywordLexeme(TRUE);
     else if(leftTerm->type == FALSE && rightTerm->type == FALSE)
         return newKeywordLexeme(TRUE);
     else
         return newKeywordLexeme(FALSE);
-    }
+}
 
-static lexeme * notEqual(lexeme *leftTerm, lexeme *rightTerm)
-    {
-    if(leftTerm->type == INTEGER)
-        {
+static lexeme * notEqual(lexeme *leftTerm, lexeme *rightTerm) {
+    if(leftTerm->type == INTEGER) {
         if(leftTerm->ival == rightTerm->ival)
             return newKeywordLexeme(FALSE);
         else
             return newKeywordLexeme(TRUE);
-        }
-    else if(leftTerm->type == STRING)
-        {
+    }
+    else if(leftTerm->type == STRING) {
         if(strcmp(leftTerm->sval,rightTerm->sval) == 0)
             return newKeywordLexeme(FALSE);
         else
             return newKeywordLexeme(TRUE);
-        }
+    }
     else if(leftTerm->type == TRUE && rightTerm->type == FALSE)
         return newKeywordLexeme(TRUE);
     else if(leftTerm->type == FALSE && rightTerm->type == TRUE)
         return newKeywordLexeme(TRUE);
     else
         return newKeywordLexeme(FALSE);
-    }
+}
 
-static lexeme * evalAnd(lexeme *leftTerm, lexeme *rightTerm)
-    {
-    if(leftTerm->type == TRUE)
-        {
+static lexeme * evalAnd(lexeme *leftTerm, lexeme *rightTerm) {
+    if(leftTerm->type == TRUE) {
         if(rightTerm->type == TRUE)
             return newKeywordLexeme(TRUE);
         else
             return newKeywordLexeme(FALSE);
-        }
+    }
     else
         return newKeywordLexeme(FALSE);
-    }
+}
 
-static lexeme * evalOr(lexeme *leftTerm, lexeme *rightTerm)
-    {
+static lexeme * evalOr(lexeme *leftTerm, lexeme *rightTerm) {
     if(leftTerm->type == TRUE)
         return newKeywordLexeme(TRUE);
     else if (rightTerm->type == TRUE)
         return newKeywordLexeme(TRUE);
     else
         return newKeywordLexeme(FALSE);
-    }
+}
 
-static lexeme * print(lexeme *args, lexeme *env)
-    {
+static lexeme * print(lexeme *args, lexeme *env) {
     lexeme *arg;
-    while(args != null)
-        {
+    while(args != null) {
         arg = eval(args->left,env);
         if(arg->type == STRING)
             printf("%s",arg->sval);
@@ -275,13 +251,12 @@ static lexeme * print(lexeme *args, lexeme *env)
         else if(arg->type == FALSE)
             printf("false");
         args = args->right;
-        }
+    }
     printf("\n");
     return arg;
-    }
+}
 
-static lexeme * evalCall(lexeme *tree, lexeme *env)
-    {
+static lexeme * evalCall(lexeme *tree, lexeme *env) {
     lexeme *closure, *params, *args, *body, *denv, *eargs, *eenv;
     closure = lookup(tree->left,null,env);
     params = closure->right->right->left;
@@ -291,92 +266,77 @@ static lexeme * evalCall(lexeme *tree, lexeme *env)
     eargs = evalArgs(args,env);
     eenv = extendEnv(denv,params,eargs);
     return evalBlock(body,eenv);
-    }
+}
 
-static lexeme * evalArgs(lexeme *args, lexeme *env)
-    {
-    if(args != null)
-        {
+static lexeme * evalArgs(lexeme *args, lexeme *env) {
+    if(args != null) {
         lexeme *arg = eval(args->left,env);
         return cons(LIST,arg,evalArgs(args->right,env));
-        }
+    }
     else
         return null;
-    }
+}
 
-static lexeme * evalDo(lexeme *doBlock, lexeme *testExpr, lexeme *env)
-    {
+static lexeme * evalDo(lexeme *doBlock, lexeme *testExpr, lexeme *env) {
     lexeme *last;
     eval(doBlock,env);
-    if(eval(testExpr,env)->type == TRUE)
-        {
+    if(eval(testExpr,env)->type == TRUE) {
         last = evalDo(doBlock,testExpr,env);
-        }
-    return last;
     }
+    return last;
+}
 
-static lexeme * evalWhile(lexeme *testExpr, lexeme *doBlock, lexeme *env)
-    {
+static lexeme * evalWhile(lexeme *testExpr, lexeme *doBlock, lexeme *env) {
     lexeme *last;
-    while(eval(testExpr,env)->type == TRUE)
-        {
+    while(eval(testExpr,env)->type == TRUE) {
         last = eval(doBlock,env);
-        }
-    return last;
     }
-    
-static lexeme * evalIf(lexeme *testExpr, lexeme *thenExpr, lexeme *elseExpr, lexeme *env)
-    {
+    return last;
+}
+
+static lexeme * evalIf(lexeme *testExpr, lexeme *thenExpr, lexeme *elseExpr, lexeme *env) {
     if(testExpr->type == TRUE)
         return eval(thenExpr,env);
     else
         return eval(elseExpr,env);
-    }
+}
 
-static lexeme * evalBlock(lexeme *tree, lexeme *env)
-    {
+static lexeme * evalBlock(lexeme *tree, lexeme *env) {
     lexeme *varDecls, *funcDecls, *statements, *last;
     varDecls = tree->left->left;
     funcDecls = tree->left->right;
     statements = tree->right;
-    while(varDecls != null)
-        {
+    while(varDecls != null) {
         last = evalVarDef(varDecls->left,env);
         varDecls = varDecls->right;
-        }
-    while(funcDecls != null)
-        {
+    }
+    while(funcDecls != null) {
         last = defineVariable(funcDecls->left->left,cons(CLOSURE,env,funcDecls->left),env);
         funcDecls = funcDecls->right;
-        }
-    while(statements != null)
-        {
+    }
+    while(statements != null) {
         last = eval(statements->left,env);
         statements = statements->right;
-        }
-    return last;
     }
+    return last;
+}
 
-static lexeme * evalVarDef(lexeme *tree, lexeme *env)
-    {
+static lexeme * evalVarDef(lexeme *tree, lexeme *env) {
     lexeme *last;
-    while(tree != null)
-        {
+    while(tree != null) {
         defineVariable(tree->left,null,env);
         last = tree->left;
         tree = tree->right;
-        }
-    return last;
     }
+    return last;
+}
 
-static lexeme * evalIs(lexeme *tree, lexeme *env)
-    {
-    if(tree->left->right != null)
-        {
+static lexeme * evalIs(lexeme *tree, lexeme *env) {
+    if(tree->left->right != null) {
         lexeme *ref;
         ref = lookup(tree->left->left,null,env);
         ref->aval[eval(tree->left->right,env)->ival] = eval(tree->right,env);
         return ref->aval[eval(tree->left->right,env)->ival];
-        }
-    return updateVariable(tree->left->left,eval(tree->right,env),env);
     }
+    return updateVariable(tree->left->left,eval(tree->right,env),env);
+}
