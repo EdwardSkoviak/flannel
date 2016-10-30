@@ -1,0 +1,22 @@
+/*
+ * Author: Edward 'Cole' Skoviak
+ * Purpose: Demonstrate first class functions
+ * Language: Flannel
+ */
+function anotherTest(testFunction){
+  print("i love");
+  testFunction();
+}
+
+function test(printStatement) {
+  function furtherTest() {
+    print(printStatement);
+  }
+  anotherTest(furtherTest);
+}
+
+function main() {
+  var x;
+  x = "first class functions!";
+  test(x);
+}

@@ -1,15 +1,18 @@
+/*
+ * Author: Edward 'Cole' Skoviak
+ * Purpose: Prints a sequence of Fibonnacci numbers
+ * Language: Flannel
+ */
+var halt_value;
 
-/* prints a sequence of Fibonnacci numbers */
+function next_Fib(num1, num2) {
+  if (num1 < halt_value) {
+    print(num1);
+    next_Fib(num2, num1+num2);
+  }
+}
 
-	var halt_value;
-
-	function next_Fib(num1, num2)
-	{if (num1<halt_value)
-		{print(num1); next_Fib(num2, num1+num2);}
-	}
-
-	function main()
-	{halt_value = 13;
-	 next_Fib(0,1);
-	}
-
+function main() {
+  halt_value = 13;
+  next_Fib(0,1);
+}

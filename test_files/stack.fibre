@@ -1,40 +1,40 @@
-
-/* example program with a stack represented as an array */
-
+/*
+ * Author: Edward 'Cole' Skoviak
+ * Purpose: Example program with a stack represented as an array
+ * Language: Flannel
+ */
 var stack, top, k;
 
 function initialize() {
-	top=-1;
+  top=-1;
 }
 
 function push (value) {
-	if (top<9) {
-		top=top+1;
-		stack[top]=value;
-	}
+  if (top<9) {
+    top=top+1;
+    stack[top]=value;
+  }
 }
 
 function pop() {
-	if (top>=0) {
-		k=stack[top];
-		top=top-1;
-	}
-        else 
-		k=0;
+  if (top>=0) {
+    k=stack[top];
+    top=top-1;
+  } else {
+    k=0;
+  }
 }
 
-function main() {            /* the main function */
-	stack = array(10);
-	initialize();
-	k=1;
-	while (k<=512) {
-		push(k);
-		k=k*2;
-	}
-	while(top>=0) {
-		pop();
-		print(k);
-	}
+function main() {
+  stack = array(10);
+  initialize();
+  k=1;
+  while (k<=512) {
+    push(k);
+    k=k*2;
+  }
+  while(top>=0) {
+    pop();
+    print(k);
+  }
 }
-
-/* end of the program */

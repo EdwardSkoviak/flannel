@@ -1,22 +1,19 @@
-/* Compute square root of N using bisection algorithm. */
-
+/*
+ * Author: Edward 'Cole' Skoviak
+ * Purpose: Compute square root of N using bisection algorithm
+ * Language: Flannel
+ */
 var N, low, high;
 
-function update( )
-{ var mid;
+function update() { var mid;
   mid=(low+high)/2;
   if (mid*mid<=N) low=mid; else high=mid;
 }
 
 
-function main( )
-{ N = 100;
+function main() { N = 100;
   low=0;
   high=N+1;
-  while (high-low>1) update( );
+  while (high-low>1) update();
   print(low);
 }
-
-
-
-

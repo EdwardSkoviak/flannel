@@ -1,0 +1,8 @@
+/*
+ * Author: Edward 'Cole' Skoviak
+ * Purpose: Hello World
+ * Language: Flannel
+ */
+function main() {
+  print("hello world!");
+}

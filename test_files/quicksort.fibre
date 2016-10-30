@@ -1,41 +1,47 @@
+/*
+ * Author: Edward 'Cole' Skoviak
+ * Purpose: This program quicksorts an array of numbers
+ * Language: Flannel
+ */
+var A, m;
 
-/* this program quicksorts an array of numbers */
+function swap (x, y) {
+  var t; t=x; x=y; y=t;
+}
 
-    var A, m;
-
-    function swap (x, y) {
-        var t; t=x; x=y; y=t;
+function partition (B, p, r) {
+  var x, i, j; var flag;
+  x = B[p];
+  i = p-1;
+  j = r+1;
+  flag=true;
+  do {
+    do i=i+1; while (B[i]<x);
+    do j=j-1; while (B[j]>x);
+    if (i<j) {
+      var t; t=B[i]; B[i]=B[j]; B[j]=t;
+    } else {
+      m=j; flag=false;
     }
+  } while (flag);
+}
 
-    function partition (B, p, r) {
-	var x, i, j; var flag;
-	x = B[p];
-	i = p-1;
-	j = r+1;
-	flag=true;
-	do {
-	    do i=i+1; while (B[i]<x);
-	    do j=j-1; while (B[j]>x);
-	    if (i<j) {var t; t=B[i]; B[i]=B[j]; B[j]=t;}
-	    else {m=j; flag=false;}
-	}
-	while (flag);
-    }
+function quicksort (C, p, r) {
+  if (p<r) {
+    partition (C, p, r);
+    quicksort (C, p, m);
+    quicksort (C, m+1, r);
+  }
+}
 
-    function quicksort (C, p, r) {
-
-	if (p<r) { partition (C, p, r);
-		   quicksort (C, p, m);
-		   quicksort (C, m+1, r);
-	         }
-    }
-
-    function main ( ) {
-	var i, my_length;
-        A = array(10);
-	my_length=5;
-	A[0]=59; A[1]=15; A[2]=26; A[3]=48; A[4]=37;
-	quicksort (A, 0, my_length-1);
-	i=0;
-	do {print(A[i]); i=i+1;} while (i<my_length);
-    }
+function main ( ) {
+  var i, my_length;
+  A = array(10);
+  my_length=5;
+  A[0]=59; A[1]=15; A[2]=26; A[3]=48; A[4]=37;
+  quicksort (A, 0, my_length-1);
+  i=0;
+  do {
+    print(A[i]); i=i+1;
+  } while (i<my_length);
+}

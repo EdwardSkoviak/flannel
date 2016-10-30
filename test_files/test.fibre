@@ -1,21 +1,25 @@
+/*
+ * Author: Edward 'Cole' Skoviak
+ * Purpose: Shows an invalid program, gives proper line number for error message
+ * Language: Flannel
+ */
 var a;
 
-/* comment here
+/*
+ * comment here
+ *
+ * newlines in comments still increment line count
+ *
+ */
 
-newlines in comments still increment line count
+function tester(ean) {
+  var a,b;
+  function testee(eger) {
+    var x;
+  }
+  a = 3;
+  testee(a);
+  b = a + 6;
+}
 
-*/
-
-function tester(ean)
-    {
-    var a,b;
-    function testee(eger)
-        {
-        var x;
-        }
-    a = 3;
-    testee(a);
-    b = a + 6;
-    }
-
-"lineNum21
+"lineNum25
