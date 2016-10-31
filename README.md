@@ -115,8 +115,9 @@ The following programs, found in `test_files/`, demonstrate the power of flannel
 
 * expression.fibre - illustrates evaluation of boolean and arithmetic operators
 * fibonacci.fibre - gives the fibonacci seq up to a desired stopping point, modify halt_value to see more fib numbers
-* helloworld.fibre - your typical helloworld program but written in a way to demonstrate functions as first class objects
-* pouringpath.fibre - pouring path solution
+* function_play.fibre - demonstrates using functions as first class objects
+* hello_world.fibre - your typical helloworld program
+* pouring_path.fibre - pouring path solution
 * quicksort.fibre - quicksorts an array of numbers, add numbers and increase array size (inside main function) as you wish
 * sqrt.fibre - computes the square root of a number using bisection algorithm, change N as you wish
 * stack.fibre - demonstrates a stack represented as an array
